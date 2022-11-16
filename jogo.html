@@ -179,6 +179,18 @@
 
     <script>
       (function ($) {
+        $("#jogo").hide();
+        var pontuacao = parseInt(window.localStorage.getItem("pontuacao"));
+        if (!pontuacao) {
+          pontuacao = 0;
+        }
+        var inicio = new Date();
+        var termino =  null;
+        $("#iniciar_jogo_botao").click(function () {
+          $("#jogo").show();
+          $("#iniciar_jogo").hide();
+        });
+
         for (var i = 0; i < 13; i++) {
           $("#card" + i + " .back").click(function () {
             $(this).hide(); //this = carta clicada. hide = esconder o back
@@ -186,10 +198,52 @@
           });
           $("#card" + i + " .front").click(function () {
             $(this).hide(); // hide = coloca o display none
-            $(this).siblings(".back").show(); // O show tira o display none
+            $(this).siblings(".back").show(); 
+            if ($("#jogo div .front:visible").length == 0){
+              termino = new Date();
+              var dif = termino.getTime() - inicio.getTime();
+              var tempo_jogo = Math.round(dif/1000);
+              var pontos_ganhos = 20;
+                
+               if (tempo_jogo < 30 ) {
+                pontos_ganhos = 100
+                
+              } else if (tempo_jogo < 50 ) {
+                pontos_ganhos = 90
+                
+              } else if (tempo_jogo < 70 ) {
+                pontos_ganhos = 80
+                
+              } else if (tempo_jogo < 90 ) {
+                pontos_ganhos = 70
+                
+              } else if (tempo_jogo < 110 ) {
+                pontos_ganhos = 60
+                
+              } else if (tempo_jogo < 130 ) {
+                pontos_ganhos = 50
+                
+              } else if (tempo_jogo < 150 ) {
+                pontos_ganhos = 40
+                
+              } else if (tempo_jogo < 170 ) {
+                pontos_ganhos = 30
+                
+              } 
+
+              pontuacao += parseInt( pontos_ganhos);
+              window.localStorage.setItem("pontuacao",pontuacao)
+
+              alert ("Parabéns! Você completou o jogo em " + tempo_jogo + " segundos. Você ganhou " + pontos_ganhos + " pontos nessa rodada! Você tem um total de " + pontuacao + " pontos" )
+              
+              window.location.reload();
+              
+            }
           });
+      
         }
       })(jQuery);
     </script>
   </body>
+</html>
 </html>
